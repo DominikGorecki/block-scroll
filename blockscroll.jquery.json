@@ -1,6 +1,6 @@
 {
     "name": "blockscroll",
-    "title": "A presentation plugin that display each element in full-screen.",
+    "title": "BlockScroll for presentations",
     "description": "It takes each element and turns it into a full-page element stacked on top of each other. The user can then go through one at a time using the keyboard or scroll, or go to a specific one. Transitions between elements have animated scroll so it looks very smooth and modern. See the demo!",
     "keywords": [
         "scroll",
@@ -11,7 +11,7 @@
         "smooth",
         "full-page"
     ],
-    "version": "1.0.2",
+    "version": "1.0.3",
     "author": {
         "name": "Dominik Gorecki",
         "email": "d@dominikgorecki.com",
