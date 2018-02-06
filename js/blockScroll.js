@@ -4,7 +4,7 @@
     var settings = $.extend({
       // These are the defaults.
       startDiv : 1,
-      fadeDuration : "slow", 
+      fadeDuration : "slow",
       paddingRatio : 0.05,
       triggerRatio : 0.005,
       scrollDuration: "fast",
@@ -15,16 +15,16 @@
 
     var theDivs = this.children().filter("div");
     var activeDiv = settings.startDiv-1; //Active did is 0-index, settings is 1-index
-    var windowHeight; 
+    var windowHeight;
     var paddingHeight;
     var triggerHeight;
-    var currentDownTrigger; 
+    var currentDownTrigger;
     var currentUpTrigger;
     var totalDivs = theDivs.length;
     var lastScrollPos;
     var activelyScrolling = false;
     var activeBackground= 0;
-    
+
     // Ensure that all of the elements are hidden just in case the css is not setup properly
     if(settings.fadeBlocks)
     {
@@ -35,7 +35,7 @@
 
     arrange();
     // Fade in the first div
-    $(theDivs[activeDiv]).animate({opacity: 1},settings.fadeDuration,'linear', function() { 
+    $(theDivs[activeDiv]).animate({opacity: 1},settings.fadeDuration,'linear', function() {
       $(window).scrollTop(0);
       calcTriggers();
       bindEvents();
@@ -45,7 +45,7 @@
     function bindEvents()
     {
       $(window).on('scroll', function(e) {
-        var scrollPosition = $(window).scrollTop(); 
+        var scrollPosition = $(window).scrollTop();
         var scrollDistance = $(window).height();
         var indexOfClosest = 0;
 
@@ -62,7 +62,7 @@
         gotoDiv(indexOfClosest);
       }, 250);
 
-      $(window).resize(function() { 
+      $(window).resize(function() {
         arrange();
       });
 
@@ -73,26 +73,34 @@
       $("#block-down-arrow").click(function() {
         goDown();
       });
-      
+
       $(document).keydown(function(e){
-          if (e.keyCode == 37 || e.keyCode == 38) { 
+          if (e.keyCode == 37 || e.keyCode == 38) {
              goUp();
              return false;
           }
 
-          if (e.keyCode == 39 || e.keyCode == 40) { 
+          if (e.keyCode == 39 || e.keyCode == 40) {
              goDown();
              return false;
           }
       });
-      $(window).bind('mousewheel', function(e){
-        if(e.originalEvent.wheelDelta > 119) {
-          goUp();
-        }
-        else if (e.originalEvent.wheelDelta < -119) {
-          goDown();
-        }
-      });
+		$(window).bind('mousewheel', function(e){
+			if(e.originalEvent.wheelDelta > 119) {
+				goUp();
+			}
+			else if (e.originalEvent.wheelDelta < -119) {
+				goDown();
+			}
+		});
+		$(window).bind('DOMMouseScroll', function(e){
+			if(e.originalEvent.detail < 0) {
+				goUp();
+			}
+			else if (e.originalEvent.detail > 0) {
+				goDown();
+			}
+		});
     }
 
     function goUp()
@@ -105,12 +113,12 @@
 
     function goDown()
     {
-      if(activeDiv < totalDivs - 1 && !activelyScrolling) 
+      if(activeDiv < totalDivs - 1 && !activelyScrolling)
       {
         gotoDiv(activeDiv+1);
       }
     }
-    
+
     function gotoDiv(number)
     {
       if(number == 0)
@@ -124,9 +132,9 @@
       activeDiv = number;
       activelyScrolling = true;
       $('html, body').animate({scrollTop: $(theDivs[activeDiv]).offset().top}, settings.scrollDuration, 'linear', function() {
-        $(theDivs[activeDiv]).animate({opacity: 1}, settings.fadeDuration,'linear', function() { 
+        $(theDivs[activeDiv]).animate({opacity: 1}, settings.fadeDuration,'linear', function() {
           setTimeout(function(){
-            activelyScrolling = false; lastScrollPos = $(window).scrollTop(); 
+            activelyScrolling = false; lastScrollPos = $(window).scrollTop();
           },50);
         });
       });
@@ -135,15 +143,15 @@
 
     function calcTriggers()
     {
-      if (activeDiv < totalDivs -1) 
+      if (activeDiv < totalDivs -1)
       {
-        currentDownTrigger = $(theDivs[activeDiv+1]).offset().top; 
+        currentDownTrigger = $(theDivs[activeDiv+1]).offset().top;
       } else {
         currentDownTrigger = -1;
       }
 
       if (activeDiv > 0) {
-        currentUpTrigger = $(theDivs[activeDiv-1]).offset().top; 
+        currentUpTrigger = $(theDivs[activeDiv-1]).offset().top;
       } else {
         currentUpTrigger = -1;
       }
@@ -156,14 +164,14 @@
       triggerHeight = windowHeight * settings.triggerRatio;
     }
 
-    
+
     function arrange()
     {
       calcDims();
       theDivs.each(function(index, element) {
         var $this = $(this);
         $this.height('auto');
-        if($this.height() < windowHeight) 
+        if($this.height() < windowHeight)
         {
           var margin = windowHeight/2 - $this.height()/2;
           $this.height(windowHeight-margin);
@@ -183,7 +191,7 @@
     {
       gotoDiv(number-1);
     }
-    
+
     return {
       goto: gotoView
     };
